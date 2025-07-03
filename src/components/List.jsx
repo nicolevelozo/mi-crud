@@ -1,15 +1,19 @@
 import React from 'react';
 import Item from './Item';
 
-function List({ items, deleteItem, editItem }) {
+function List({ students, deleteStudent, editStudent }) {
+  if (students.length === 0) {
+    return <p>No hay alumnos registrados.</p>;
+  }
+
   return (
-    <ul>
-      {items.map((item) => (
+    <ul className="list">
+      {students.map((student) => (
         <Item
-          key={item.id}
-          item={item}
-          deleteItem={deleteItem}
-          editItem={editItem}
+          key={student.id}
+          student={student}
+          deleteStudent={deleteStudent}
+          editStudent={editStudent}
         />
       ))}
     </ul>

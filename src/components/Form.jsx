@@ -1,32 +1,63 @@
 import React, { useState, useEffect } from 'react';
 
-function Form({ addOrUpdateItem, itemToEdit }) {
-  const [inputValue, setInputValue] = useState('');
+function Form({ addOrUpdateStudent, studentToEdit }) {
+  const [name, setName] = useState('');
+  const [subject, setSubject] = useState('');
+  const [average, setAverage] = useState('');
 
   useEffect(() => {
-    if (itemToEdit) {
-      setInputValue(itemToEdit.value);
+    if (studentToEdit) {
+      setName(studentToEdit.name);
+      setSubject(studentToEdit.subject);
+      setAverage(studentToEdit.average);
     } else {
-      setInputValue('');
+      setName('');
+      setSubject('');
+      setAverage('');
     }
-  }, [itemToEdit]);
+  }, [studentToEdit]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (inputValue.trim()) {
-      addOrUpdateItem(inputValue);
-      setInputValue('');
+    if (name.trim() && subject.trim() && average !== '') {
+      const avgNumber = parseFloat(average);
+      if (avgNumber >= 1 && avgNumber <= 7) {
+        addOrUpdateStudent({ name, subject, average: avgNumber });
+        setName('');
+        setSubject('');
+        setAverage('');
+      } else {
+        alert('El promedio debe estar entre 1.0 y 7.0');
+      }
+    } else {
+      alert('Completa todos los campos.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form">
       <input
         type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Nombre del Alumno"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
-      <button type="submit">{itemToEdit ? 'Actualizar' : 'Agregar'}</button>
+      <input
+        type="text"
+        placeholder="Asignatura"
+        value={subject}
+        onChange={(e) => setSubject(e.target.value)}
+      />
+      <input
+        type="number"
+        step="0.1"
+        placeholder="Promedio (1.0 - 7.0)"
+        value={average}
+        onChange={(e) => setAverage(e.target.value)}
+      />
+      <button type="submit">
+        {studentToEdit ? 'Actualizar Alumno' : 'Agregar Alumno'}
+      </button>
     </form>
   );
 }
